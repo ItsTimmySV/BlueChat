@@ -1,0 +1,75 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlueChat</title>
+  <link href="styles.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>BlueChat</h1>
+      <div id="status">Bluetooth: Desconectado</div>
+    </header>
+
+    <div class="devices-list" id="devicesList">
+      <h2>Dispositivos cercanos</h2>
+      <div class="devices-container" id="devicesContainer">
+        <!-- Los dispositivos se agregarán dinámicamente aquí -->
+      </div>
+      <button id="scanButton" class="scan-btn">
+        <i class="fas fa-sync-alt"></i> Buscar dispositivos
+      </button>
+    </div>
+
+    <div class="chat-container" id="chatContainer" style="display: none;">
+      <div class="chat-messages" id="messages">
+        <!-- Los mensajes se agregarán dinámicamente aquí -->
+      </div>
+
+      <div class="input-area">
+        <button id="attachButton" class="attach-btn">
+          <i class="fas fa-paperclip"></i>
+        </button>
+        
+        <div class="input-options" id="inputOptions">
+          <button data-type="image">
+            <i class="fas fa-image"></i>
+          </button>
+          <button data-type="audio">
+            <i class="fas fa-microphone"></i>
+          </button>
+          <button data-type="gif">
+            <i class="fas fa-film"></i>
+          </button>
+          <button data-type="emoji">
+            <i class="fas fa-smile"></i>
+          </button>
+        </div>
+
+        <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
+        
+        <button id="sendButton" class="send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Emoji Picker -->
+    <div class="emoji-picker" id="emojiPicker">
+      <!-- Emojis se cargarán dinámicamente -->
+    </div>
+
+    <!-- GIF Picker -->
+    <div class="gif-picker" id="gifPicker">
+      <input type="text" id="gifSearch" placeholder="Buscar GIFs...">
+      <div class="gif-results" id="gifResults"></div>
+    </div>
+  </div>
+
+  <script src="bluetooth.js"></script>
+  <script src="chat.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
