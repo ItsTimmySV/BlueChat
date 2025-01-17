@@ -1,3 +1,4 @@
+// Referencias a los objetos ChatManager y BluetoothChat
 class UIManager {
   constructor(chatManager) {
     this.chat = chatManager;
@@ -22,43 +23,6 @@ class UIManager {
     // GIF search
     const gifSearch = document.getElementById('gifSearch');
     gifSearch.addEventListener('input', this.debounce(this.searchGifs.bind(this), 500));
-    
-    // Inicializar GIF API
-    this.initializeGiphy();
-  }
-
-  initializeGiphy() {
-    // Usando la API de Giphy directamente sin SDK
-    this.GIPHY_API_KEY = 'PaQT9Q7id4rPZtV1RlbxmGQyE7aU5PMa'; // API key pública de ejemplo
-    this.GIPHY_API_URL = 'https://api.giphy.com/v1/gifs/search';
-  }
-
-  async searchGifs(event) {
-    const query = event.target.value;
-    if (!query) return;
-
-    try {
-      const response = await fetch(
-        `${this.GIPHY_API_URL}?api_key=${this.GIPHY_API_KEY}&q=${query}&limit=15`
-      );
-      const data = await response.json();
-      
-      const gifResults = document.getElementById('gifResults');
-      gifResults.innerHTML = '';
-      
-      data.data.forEach(gif => {
-        const img = document.createElement('img');
-        img.src = gif.images.fixed_height_small.url;
-        img.classList.add('gif-item');
-        img.onclick = () => {
-          this.chat.sendMessage(gif.images.original.url, 'gif');
-          this.gifPicker.classList.remove('active');
-        };
-        gifResults.appendChild(img);
-      });
-    } catch (error) {
-      console.error('Error al buscar GIFs:', error);
-    }
   }
 
   async startScanning() {
@@ -110,7 +74,7 @@ class UIManager {
     this.statusElement.textContent = `Bluetooth: ${message}`;
   }
 
-  async loadEmojis() {
+  loadEmojis() {
     const emojis = ['😀', '😂', '😊', '😍', '🥰', '😎', '😴', '🤔', '😅', '😌',
                     '👍', '👎', '👋', '❤️', '💔', '💯', '🎉', '🌟', '🔥', '💫'];
     
@@ -132,6 +96,34 @@ class UIManager {
     this.emojiPicker.appendChild(emojiGrid);
   }
 
+  async searchGifs(event) {
+    const query = event.target.value;
+    if (!query) return;
+
+    const GIPHY_API_KEY = 'McAWb0Q1161ZnE0DIMGQUJIXxvt0h8kE'; // Demo key - replace with your own
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=15`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const gifResults = document.getElementById('gifResults');
+      gifResults.innerHTML = '';
+      
+      data.data.forEach(gif => {
+        const img = document.createElement('img');
+        img.src = gif.images.fixed_height_small.url;
+        img.classList.add('gif-item');
+        img.onclick = () => {
+          this.chat.sendMessage(gif.images.original.url, 'gif');
+          this.gifPicker.classList.remove('active');
+        };
+        gifResults.appendChild(img);
+      });
+    } catch (error) {
+      console.error('Error al buscar GIFs:', error);
+    }
+  }
+
   debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -145,11 +137,9 @@ class UIManager {
   }
 }
 
-window.UIManager = UIManager;
-
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
-  const bluetoothChat = new BluetoothChat();
-  const chatManager = new ChatManager(bluetoothChat);
-  const uiManager = new UIManager(chatManager);
+  window.bluetoothChat = new BluetoothChat();
+  window.chatManager = new ChatManager(window.bluetoothChat);
+  window.uiManager = new UIManager(window.chatManager);
 });
